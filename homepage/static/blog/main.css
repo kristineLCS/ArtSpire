@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Truculenta:opsz,wght@12..72,100..900&display=swap');
+
+
+html, body {
+    background: #fafafa;
+    color: #333333;
+    /* margin-top: 5rem; */
+    width: 100%;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    flex-direction: column; 
+}
+
+body{
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+button{
+    border: 1px solid #000000;
+    border-radius: 5px;
+    background-color: #00000000;
+    text-align: center;
+    font-size: 14px;
+}
+
+a:hover{
+    color: #428bca;
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-family: 'Truculenta', 'times new roman', 'helvetica';
+    color: #444444;
+}
+
+ul {
+margin: 0;
+}
+
+.bg-steel {
+background-color: #52604f;
+}
+
+.site-header{
+    font-family: 'Truculenta', 'times new roman', 'helvetica';
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #d6e8d2;
+
+}
+
+/* Sidebar Styles for Small Screens */
+/* Default navbar styles */
+.navbar {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Sidebar Styles for Small Screens */
+@media (max-width: 768px) {
+    .navbar-collapse {
+        position: fixed;
+        top: 0;
+        right: -250px;
+        width: 250px;
+        height: 100vh;
+        background-color: #343a40;
+        padding-top: 20px;
+        transition: 0.3s ease-in-out;
+        z-index: 1000;
+    }
+
+    .navbar-collapse.show {
+        right: 0; /* Slide in when opened */
+    }
+
+    .navbar-nav {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        padding-left: 20px;
+    }
+
+    .navbar-toggler {
+        position: absolute;
+        font-size: 15px;
+        right: 10px;
+        top: 10px;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .close-btn:hover {
+        color: red;
+    }
+}
+
+@media (min-width: 768px) {  /* Adjust breakpoint if needed */
+    .close-btn {
+        display: none;
+    }
+}
+
+.navbar-nav .nav-link {
+    font-family: 'Truculenta', 'times new roman', 'helvetica';
+    /* color: #cbd5db; */
+    font-size: 18px;
+
+}
+
+.site-header .navbar-nav .nav-link:hover {
+    color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link.active {
+    font-weight: 500;
+}
+
+.navbar-brand{
+    color: rgb(255, 242, 95);
+}
+
+#logout {
+    font-family: 'Truculenta', 'times new roman', 'helvetica';
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 7px;
+}
+
+#logout:hover{
+    color: #ffffff;
+
+}
+
+
+/* BASE.HTML */
+.main-content{
+    flex: 1;
+}
+
+.main-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.row{
+    margin-right: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.artspire{
+    font-family: 'Truculenta', 'times new roman', 'helvetica';
+
+}
+
+/* HOME PAGE */
+.weekly-challlenge{
+    margin-top: 0;
+    font-display: flex;
+    justify-content: center;
+}
+
+.weekly-prompt{
+    margin-top: 250px;
+    font-size: 40px;
+}
+
+.header-challenge{
+    /* margintop: 180px; */
+    margin-bottom: 150px;
+    background-color: #d6e8d2;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    width: 100%;
+    height: 500px
+}
+.banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 50px;
+    /* padding-top: 100px; */
+    width: 100%;
+}
+
+.heading{
+    padding-bottom: 50px;
+}
+
+.category-container{
+    margin-bottom: 350px;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.categories{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
+    gap: 20px; /* Space between items */
+    text-align: center;
+
+}

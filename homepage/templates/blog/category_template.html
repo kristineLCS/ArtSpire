@@ -1,0 +1,13 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+    <!-- Display Category Title -->
+    <h1 id="category-name" data-category="{{ category }}">{{ category|title }}</h1>
+
+    <!-- Generate Button -->
+    <button type="submit" id="generate-btn">Generate Prompt</button>
+
+    <!-- Prompt Display Section -->
+    <p id="prompt-text">Your generated prompt will appear here.</p>
+
+{% endblock %}

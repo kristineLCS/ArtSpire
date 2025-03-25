@@ -1,0 +1,48 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+    <div class="header-challenge">
+        <div class="banner">
+            <h2 class="weekly-challlenge">Weekly Challenge</h2>
+            <h4 class="weekly-prompt">"Illustrate a hidden world inside a still life object"</h4>
+        </div>
+    </div>
+
+
+{% endblock content %}
+
+{% block aside %}
+    <h5>Have an artist block? Getting back into art? Starting a new hobby? Spark your creativity and imagination just by a click of a button!
+        Pick and choose from the categories and generate as much prompts as you want. <br>
+        Develop consistant creative skills by joining the weekly or daily (or both) challenge. Feel fre to use any medium you prefer. 
+        Post on our community to share your artworks with other artists.
+    </h5>
+    <div class="category-container">
+        <div class="random-prompts">
+            <div class="aside-header">
+                <h4>CHOOSE FROM THE WEEKLY CHALLANGE OR THE DAILY CHALLANGE</h4>
+                <h2>DAILY Challenge</h2>
+            </div>
+
+            <div class="categories">
+                <a class="category" href="{% url 'daily_challenge' 'animals' %}" data-category="animals">ANIMALS</a>
+                <a class="category" href="{% url 'daily_challenge' 'characters' %}" data-category="characters">CHARACTERS</a>
+                <a class="category" href="{% url 'daily_challenge' 'space' %}" data-category="space">SPACE</a>
+                <a class="category" href="{% url 'daily_challenge' 'nature' %}" data-category="nature">NATURE</a>
+                <a class="category" href="{% url 'daily_challenge' 'emotions' %}" data-category="emotions">EMOTIONS</a>
+                <a class="category" href="{% url 'daily_challenge' 'food' %}" data-category="food">FOOD</a>
+                <a class="category" href="{% url 'daily_challenge' 'fantasy-mythology' %}" data-category="fantasy-mythology">FANTASY & MYTHOLOGY</a>
+                <a class="category" href="{% url 'daily_challenge' 'tiny-worlds' %}" data-category="tiny-worlds">TINY WORLDS</a>
+                <a class="category" href="{% url 'daily_challenge' 'abstract-surreal' %}" data-category="abstract-surreal">ABSTRACT / SURREAL</a>
+                <a class="category" href="{% url 'daily_challenge' 'alternate-universe' %}" data-category="alternate-universe">ALTERNATE UNIVERSE</a>
+            </div>
+
+        </div>
+
+
+    </div>
+{% endblock %}
+
+
