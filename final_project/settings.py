@@ -26,12 +26,12 @@ load_dotenv(ENV_PATH)
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2=20rj5ps5^76x4!#c8)44!5=&@hxnz0!()c5$gajg0g)q_6k%'
+SECRET_KEY = os.getenv('MY_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'artspire-pyvm.onrender.com']
 
 
 # Application definition
