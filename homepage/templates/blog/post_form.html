@@ -11,8 +11,10 @@
                 {{ form.content|as_crispy_field }}
 
                 <!-- Manually add the image field -->
-                <label for="id_image">Upload Image:</label>
-                <input type="file" name="image" id="id_image" class="form-control">
+                 <div class="image-form">
+                    <label for="id_image">Upload Image:</label>
+                    {{ form.image }}
+                </div>
 
             </fieldset>
             <div class="form-group">

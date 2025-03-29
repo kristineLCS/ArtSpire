@@ -1,4 +1,5 @@
 from django.db import models
+import os
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -17,6 +18,7 @@ class Post(models.Model):
     
     def get_absolute_url(self): # Change here
         return reverse('post-detail', kwargs={'pk': self.pk})
+    
 
 
 class ArtPrompt(models.Model):

@@ -229,3 +229,9 @@ background-color: #52604f;
     text-align: center;
 
 }
+
+/* COMMUNITY SECTION */
+.post-img{
+    max-width: 100%; 
+    height: auto;
+}

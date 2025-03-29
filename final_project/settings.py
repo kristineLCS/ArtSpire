@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -111,7 +114,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+cloudinary.config(
+    cloud_name= os.getenv('MY_CLOUD_NAME'),
+    api_key= os.getenv('CLOUD_API_KEY'),
+    api_secret= os.getenv('CLOUD_API_SECRET')
+)
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('MY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUD_API_KEY'),
+    'API_SECRET': os.getenv('CLOUD_API_SECRET'),
+}
+
+# Use cloudinary storage for media files
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Set media URL to Cloudinary
+MEDIA_URL = f'https://res.cloudinary.com/{os.getenv("MY_CLOUD_NAME")}/image/upload/'
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 

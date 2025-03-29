@@ -1,4 +1,7 @@
 {% extends "blog/base.html" %}
+
+<!-- Displays posts made by a specific user -->
+ 
 {% block content %}
     <h1 class="mb-3">
     Posts by {{ view.kwargs.username }} ({{ page_obj.paginator.count }})

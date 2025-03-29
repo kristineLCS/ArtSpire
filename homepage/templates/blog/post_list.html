@@ -1,25 +1,31 @@
 {% extends "blog/base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
 
-{% for post in posts|dictsortreversed:"date_posted" %}
-  <article class="media content-section">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a class="mr-2" href="{% url 'user-posts' post.author.username %}">
-          {{ post.author }}
+<!-- This is the community page -->
+
+  {% for post in posts|dictsortreversed:"date_posted" %}
+    <article class="media content-section">
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" href="{% url 'user-posts' post.author.username %}">
+            {{ post.author }}
           </a>
-        <small class="text-muted">{{ post.date_posted|date:'dS, F, Y, h:i A' }}</small>
+          <small class="text-muted">{{ post.date_posted|date:'dS, F, Y, h:i A' }}</small>
+        </div>
+        <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
         {% if post.image %}
-            <img src="{{ post.image.url }}" alt="Uploaded artwork" style="max-width: 100%; height: auto;">
+          <img class="post-img" src="{{ post.image.url }}?w=500&h=500&fit=crop" alt="Post Image">
+        {% else %}
+          <p>No image available</p>
         {% endif %}
+        <p class="article-content">{{ post.content|truncatechars:100 }}</p> <!--100 character limit for post preview-->
+        <a href="{% url 'post-detail' post.id %}" class="btn btn-primary">Read More</a>
       </div>
-      <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
-      <p class="article-content">{{ post.content|truncatechars:100 }}</p> <!--100 character limit for post preview-->
-      <a href="{% url 'post-detail' post.id %}" class="btn btn-primary">Read More</a>
-    </div>
-  </article>
-{% endfor %}
+    </article>
+  {% endfor %}
+
 
   {% if is_paginated %}
     <div class="post-pagination">
