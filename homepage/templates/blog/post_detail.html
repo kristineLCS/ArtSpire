@@ -30,23 +30,36 @@
             Likes
           </form>
 
+          <p class="article-content">{{ object.content }}</p>
 
           <!-- Comment Section -->
-          <h2>Comments..</h2>
+          <h2>Comments</h2>
 
-          {% if not post.comments.all %}
-            No Comments Yet...<a href="#">Add Comment</a>
+          <!-- Comment Form -->
+          {% if user.is_authenticated %}
+            <h5>Add Comment</h5>
+            <form method="POST">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button class="btn btn-secondary" type="submit">Add Comment</button>
+            </form>
           {% else %}
-            {% for comment in post.comments.all %}
-              <strong>
-                {{ comment.name }} -
-                {{ comment.date_added }}
-              </strong>
-              {{ comment.body }}
-            {% endfor %}
+            <h5><a href="{% url 'login' %}">Login</a> to Comment</h5>
           {% endif %}
 
-          <p class="article-content">{{ object.content }}</p>
+        <!-- Display Comments -->
+        {% if comments %}
+          {% for comment in comments %}
+            <div class="comment">
+              <strong>{{ comment.name }} - {{ comment.date_added|date:"d M Y, H:i" }}</strong>
+              <p>{{ comment.body }}</p>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No comments yet.</p>
+        {% endif %}
+
+
         </div>
       </article>
     </div>

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Post
+from .models import Post, Comment
 from django.http import JsonResponse
 from pathlib import Path
 import openai
@@ -16,9 +16,8 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
-from .models import ArtPrompt
 import random
 
 
@@ -105,10 +104,29 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user == post.author
 
 
+@login_required
 def LikeView(request, pk):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     post.likes.add(request.user)
     return HttpResponseRedirect(reverse('post-detail', args=[str(pk)]))
+
+
+@login_required
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    comments = post.comments.all()
+    form = CommentForm()
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.name = request.user.username  # Associate comment with logged-in user
+            comment.save()
+            return redirect("post-detail", pk=post.pk)
+
+    return render(request, "blog/post_detail.html", {"post": post, "comments": comments, "form": form})
 
 
 
