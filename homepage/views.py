@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from .models import Post
 from django.http import JsonResponse
 from pathlib import Path
@@ -60,6 +62,14 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(PostDetailView, self).get_context_data(**kwargs)
+
+        stuff = get_object_or_404(Post, id=self.kwargs['pk'])
+        total_likes = stuff.total_likes()
+        context["total_likes"] = total_likes
+        return context
+
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['title', 'content', 'image']  # Make sure 'image' is here
@@ -74,25 +84,33 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['title', 'content']
+    template_name = 'blog/post_form.html'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
     
-    def test_func(self):
+    def test_func(self): # Function to make sure logged in user can only edit their posts and not another user's post
         post = self.get_object()
         return self.request.user == post.author
     
-
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
+    template_name = 'blog/post_confirm_delete.html'
+    success_url = "/" # redirecting the user back to the homepage after deleting a Post successfully
+
 
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
 
-# def community(request):
-#     return render(request, 'blog/community.html')
+
+def LikeView(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.likes.add(request.user)
+    return HttpResponseRedirect(reverse('post-detail', args=[str(pk)]))
+
+
 
 def daily_challenge(request, category):
     """ Renders category page without pre-loading a prompt. """
@@ -132,15 +150,14 @@ def get_prompt(request):
     # User message
     user_prompt = f"Generate a **brand-new, category-specific** art prompt for **{category.upper()}**."
 
-    response = openai.ChatCompletion.create(
-        model="gpt-4o-mini",
-        temperature=0.9,# randomness
+    response = openai.chat.completions.create(
+        model="gpt-4o-mini", 
+        temperature=0.9,  # randomness
         messages=[
             {"role": "system", "content": system_instruction},
             {"role": "user", "content": user_prompt}
         ]
     )
 
-    generated_prompt = response["choices"][0]["message"]["content"]
-
+    generated_prompt = response.choices[0].message.content
     return JsonResponse({"prompt": generated_prompt})

@@ -8,6 +8,7 @@ from .views import (
     PostCreateView,
     PostUpdateView,
     PostDeleteView,
+    LikeView,
     UserPostListView
 )
 
@@ -18,6 +19,7 @@ urlpatterns = [
     path('post/new/', PostCreateView.as_view(), name='post-create'),
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
+    path('like/<int:pk>', LikeView, name='post_like'),
     path('user/<str:username>', UserPostListView.as_view(), name='user-posts'),
     path("challenge/<str:category>/", views.daily_challenge, name="daily_challenge"),
     path("get_prompt/", views.get_prompt, name="get_prompt"),

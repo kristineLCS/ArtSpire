@@ -9,12 +9,43 @@
             <small class="text-muted">{{ object.date_posted|date:'dS, F, Y' }}</small>
             {% if object.author == user %}
               <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a> <!-- Changed here -->
-                <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a> <!-- Changed here -->
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
+                <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
               </div>
             {% endif %}
           </div>
           <h2 class="article-title">{{ object.title }}</h2>
+
+          {% if object.image %}
+            <img class="post-img" src="{{ object.image.url }}?w=800&h=800&fit=crop" alt="Uploaded image">
+          {% else %}
+            <p>No image available</p>
+          {% endif %}
+
+          <form action="{% url 'post_like' post.pk %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-sm">
+              Like
+            </button> - {{ total_likes }}
+            Likes
+          </form>
+
+
+          <!-- Comment Section -->
+          <h2>Comments..</h2>
+
+          {% if not post.comments.all %}
+            No Comments Yet...<a href="#">Add Comment</a>
+          {% else %}
+            {% for comment in post.comments.all %}
+              <strong>
+                {{ comment.name }} -
+                {{ comment.date_added }}
+              </strong>
+              {{ comment.body }}
+            {% endfor %}
+          {% endif %}
+
           <p class="article-content">{{ object.content }}</p>
         </div>
       </article>

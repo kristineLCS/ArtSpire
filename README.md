@@ -9,3 +9,7 @@ To Do:
 - Password reset
 - Hashtag filter (use tag)
 - Testings
+- Add Images to post_detail.html (DONE)
+- Allow users to like and comment on other user's posts
+- Create user post history on their profile
+- Create a feedback form
