@@ -9,7 +9,7 @@
             <small class="text-muted">{{ object.date_posted|date:'dS, F, Y' }}</small>
             {% if object.author == user %}
               <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'update-comment' object.id %}">Update</a>
                 <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
               </div>
             {% endif %}
@@ -30,38 +30,45 @@
             Likes
           </form>
 
-          <p class="article-content">{{ object.content }}</p>
-
-          <!-- Comment Section -->
-          <h2>Comments</h2>
 
           <!-- Comment Form -->
-          {% if user.is_authenticated %}
-            <h5>Add Comment</h5>
-            <form method="POST">
-              {% csrf_token %}
-              {{ form.as_p }}
-              <button class="btn btn-secondary" type="submit">Add Comment</button>
-            </form>
-          {% else %}
-            <h5><a href="{% url 'login' %}">Login</a> to Comment</h5>
-          {% endif %}
+          <!-- <div id="error-message"></div> -->
 
-        <!-- Display Comments -->
-        {% if comments %}
-          {% for comment in comments %}
-            <div class="comment">
-              <strong>{{ comment.name }} - {{ comment.date_added|date:"d M Y, H:i" }}</strong>
-              <p>{{ comment.body }}</p>
-            </div>
-          {% endfor %}
+        <!-- Comment Form -->
+        {% if user.is_authenticated %}
+            <h5>Add Comment</h5>
+            <form id="comment-form" data-post-id="{{ post.pk }}">
+                {% csrf_token %}
+                <textarea id="id_body" name="body" rows="3" class="form-control" required></textarea>
+                <button class="btn btn-secondary" type="submit">Add Comment</button>
+            </form>
+            <p id="error-message"></p>
         {% else %}
-          <p>No comments yet.</p>
+            <h5><a href="{% url 'login' %}">Login</a> to Comment</h5>
         {% endif %}
 
+        <!-- Display Comments -->
+        <h2>Comments</h2>
+        <div id="comments-section">
+          {% for comment in post.comments.all %}
+            <div class="comment" id="comment-{{ comment.id }}">
+                <strong>{{ comment.name }} - {{ comment.date_added|date:"d M Y, H:i" }}</strong>
+                <p class="comment-body">{{ comment.body }}</p>
+                <!-- Edit and Delete buttons -->
+                {% if user.is_authenticated and comment.name == user.username %}
+                  <!-- Edit and Delete buttons only visible to the comment author -->
+                  <button type="submit" class="edit-comment btn btn-sm btn-primary" data-comment-id="{{ comment.id }}">Edit</button>
+                  <button  type="submit" class="delete-comment btn btn-sm btn-danger" data-comment-id="{{ comment.id }}">Delete</button>
+                {% endif %}
+            </div>
+          {% empty %}
+            <p>No comments yet.</p>
+          {% endfor %}
+        </div>
 
         </div>
       </article>
     </div>
   </div>
-{% endblock content %}
+
+  {% endblock content %}

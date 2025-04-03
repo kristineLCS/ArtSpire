@@ -13,3 +13,8 @@ To Do:
 - Allow users to like and comment on other user's posts
 - Create user post history on their profile
 - Create a feedback form
+- Fix edit, delete, save changes button for comment delete and edit
+
+
+Links:
+- Codemy.com (Youtube)

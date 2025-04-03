@@ -242,3 +242,13 @@ background-color: #52604f;
     margin-top: 100px;
     margin-bottom: 50px;
 }
+
+#error-message{
+    color: red;
+    display: none;
+    padding: 10px;
+    border: 1px solid red;
+    background-color: #f8d7da;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}

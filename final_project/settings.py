@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import cloudinary
-import cloudinary.api
 import cloudinary.uploader
+import cloudinary.api
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,8 +42,6 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'artspire-pyvm.onrender.com']
 INSTALLED_APPS = [
     'homepage.apps.HomepageConfig',
     'users.apps.UsersConfig',
-    'cloudinary',
-    'django_cloudinary_storage',
     'community.apps.CommunityConfig',
     'crispy_forms',
     'crispy_bootstrap5',
@@ -129,7 +127,7 @@ CLOUDINARY_STORAGE = {
 }
 
 # Use cloudinary storage for media files
-DEFAULT_FILE_STORAGE = 'django_cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Set media URL to Cloudinary
 MEDIA_URL = f'https://res.cloudinary.com/{os.getenv("MY_CLOUD_NAME")}/image/upload/'

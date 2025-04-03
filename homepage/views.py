@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Post, Comment
+from .models import Post, Comment 
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from pathlib import Path
 import openai
 import os
@@ -18,8 +19,7 @@ from django.views.generic import (
 )
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
-import random
-
+import json
 
 _ = load_dotenv(find_dotenv())
 
@@ -112,21 +112,80 @@ def LikeView(request, pk):
 
 
 @login_required
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comments.all()
-    form = CommentForm()
+def post_comment(request, pk):
 
     if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.name = request.user.username  # Associate comment with logged-in user
-            comment.save()
-            return redirect("post-detail", pk=post.pk)
+        print("➡️ Received a POST request")  # Debugging: Check if the view is hit
+        print("📩 Request POST Data:", request.POST)
 
-    return render(request, "blog/post_detail.html", {"post": post, "comments": comments, "form": form})
+
+        post = get_object_or_404(Post, pk=pk)
+        form = CommentForm(request.POST)
+        
+        if form.is_valid():
+            comment = form.save(commit=False)  # Don't save yet
+            comment.post = post  # Associate with the post
+            comment.name = request.user.username  # Assign the logged-in user's name
+            comment.save()  # Now save the comment
+
+            
+            print("✅ Comment Saved Successfully:", comment.body)
+            
+            # Return JSON response for JavaScript to update UI dynamically
+            return JsonResponse({
+                "success": True,
+                "comment_id": comment.id,  # Include comment ID for edit/delete buttons
+                "name": comment.name,
+                "date_added": comment.date_added.strftime("%d %b %Y, %H:%M"),
+                "body": comment.body,
+            })
+        else:
+            print("❌ Form Errors:", form.errors)  # Print form errors for debugging
+            return JsonResponse({'success': False, 'error': 'Invalid form data'})
+
+    print("⛔ Received a non-POST request")  # Debugging: If the request isn't POST
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+@login_required
+@csrf_exempt  # Or use a proper decorator
+def delete_comment(request, comment_id):
+    if request.method == "POST":
+        try:
+            comment = get_object_or_404(Comment, id=comment_id)
+            if comment.name != request.user.username:
+                return JsonResponse({"success": False, "error": "You cannot delete this comment."})
+            
+            comment.delete()
+            return JsonResponse({"success": True})
+
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+
+    return JsonResponse({"success": False, "error": "Invalid request method"})
+
+
+
+@login_required
+@csrf_exempt 
+# same as def edit_comment
+def update_comment(request, comment_id):
+    if request.method == "POST":
+        try:
+            comment = get_object_or_404(Comment, id=comment_id)
+            if comment.name != request.user.username:
+                return JsonResponse({"success": False, "error": "You cannot edit this comment."})
+            
+            data = json.loads(request.body)
+            comment.body = data.get("body", "")
+            comment.save()
+
+            return JsonResponse({"success": True, "body": comment.body, "date_added": comment.date_added.strftime("%d %b %Y, %H:%M")})
+
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+
+    return JsonResponse({"success": False, "error": "Invalid request method"})
 
 
 
