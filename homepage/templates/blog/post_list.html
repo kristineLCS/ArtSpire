@@ -9,6 +9,10 @@
     <article class="media content-section">
       <div class="media-body">
         <div class="article-metadata">
+          <img class="profile-pic"
+              src="{{ post.author.profile.image_url|add:'?c_thumb,g_face,w_150,h_150,r_max' }}"
+              alt="{{ user.username }}'s Profile Picture">
+
           <a class="mr-2" href="{% url 'user-posts' post.author.username %}">
             {{ post.author }}
           </a>

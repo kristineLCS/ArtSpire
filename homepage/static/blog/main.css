@@ -154,7 +154,7 @@ background-color: #52604f;
 
 
 /* BASE.HTML */
-.main-content{
+.main-container{
     flex: 1;
 }
 
@@ -162,8 +162,11 @@ background-color: #52604f;
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
     flex-direction: column;
+    margin-top: 0px;
+    margin-left: 80px;
+    margin-right: 80px; 
 }
 
 .row{
@@ -251,4 +254,32 @@ background-color: #52604f;
     background-color: #f8d7da;
     border-radius: 5px;
     margin-bottom: 10px;
+}
+
+
+/* PROFILE PAGE */
+.profile-content-section{
+    margin-top: 60px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.profile-section{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+
+.profile-pic{
+    margin-right: 10px;
+    width: 40px; 
+    height: 40px; 
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-details{
+    display: flex;
+    align-items: center;
 }

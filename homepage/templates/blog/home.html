@@ -41,6 +41,30 @@
 
         </div>
 
+        <div class="feedback-container">
+            <div class="feedback-form">
+                <h2>Feedback Form</h2>
+
+                <!-- Feedback Form -->
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Submit</button>
+                </form>
+
+                {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            {% if message.tags == 'success' and message.message != "Your account has been updated" %}
+                                <div class="alert alert-success">
+                                    {{ message }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
 
     </div>
 {% endblock %}

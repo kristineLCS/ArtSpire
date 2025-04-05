@@ -5,6 +5,9 @@
       <article class="media content-section">
         <div class="media-body">
           <div class="article-metadata">
+            <img class="profile-pic"
+              src="{{ post.author.profile.image_url|add:'?c_thumb,g_face,w_150,h_150,r_max' }}"
+              alt="{{ user.username }}'s Profile Picture">
             <a class="mr-2" href="#">{{ object.author }}</a>
             <small class="text-muted">{{ object.date_posted|date:'dS, F, Y' }}</small>
             {% if object.author == user %}
@@ -29,6 +32,10 @@
             </button> - {{ total_likes }}
             Likes
           </form>
+
+          <div class="post-content">
+            <p class="article-content">{{ post.content }}</p>
+          </div>
 
 
           <!-- Comment Form -->

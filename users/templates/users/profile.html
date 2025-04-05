@@ -2,23 +2,50 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="profile-content-section">
-        <div class="media">
-            <div class="media-body">
-                <h2 class="account-heading">{{ user.username }}</h2>
+        <div class="profile-section">
+            <div class="profile-details">
+                <img class="profile-pic"
+              src="{{ user.profile.image_url|add:'?c_thumb,g_face,w_150,h_150,r_max' }}"
+              alt="{{ user.username }}'s Profile Picture">
+                <div class="media-body">
+                    <h2 class="account-heading">{{ user.username }}</h2>
+                </div>
+            </div>
+
+            <div class="email-display">
                 <p class="text-secondary">{{ user.email }}</p>
             </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Profile Info</legend>
+                    <!-- Updated ledgend to display Profile Info -->
+                    {{ u_form|crispy }} <!-- Updated to load the user form and let crispy take care of the formating -->
+                    {{ p_form|crispy }} <!-- Updated to load the profile form and let crispy take care of the formating -->
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Update</button>
+                </div>
+            </form>
         </div>
 
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Profile Info</legend>
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Update</button>
-            </div>
-        </form>
-
+        <!-- Post History Section -->
+        <h3>Post History</h3>
+        {% if posts %}
+            <ul>
+                {% for post in posts %}
+                    <li>
+                        <a href="{% url 'post-detail' post.pk %}">
+                            <strong>{{ post.title }}</strong> - {{ post.date_posted|date:"d M Y" }}
+                        </a>
+                        <p>{{ post.body }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No posts yet.</p>
+        {% endif %}
     </div>
 
 {% endblock content %}

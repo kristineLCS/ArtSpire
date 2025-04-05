@@ -11,7 +11,7 @@ class Post(models.Model):
     image = models.ImageField(upload_to="post_images/", blank=True, null=True)
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     likes = models.ManyToManyField(User, related_name='community_posts')
 
 
@@ -33,6 +33,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return '%s - %s' % (self.post.title, self.name)
+    
+
+class Feedback(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True)
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.subject} - {self.user.username if self.user else 'Anonymous'} on {self.created_at}"
 
 
 class ArtPrompt(models.Model):

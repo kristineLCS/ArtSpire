@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Post, Comment 
@@ -17,7 +18,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, FeedbackForm
 from django.contrib.auth.decorators import login_required
 import json
 
@@ -35,8 +36,19 @@ User = get_user_model()
 
 
 def home(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Thank you for your feedback!")
+            # Clear all previous messages (e.g., from profile updates)
+            messages.get_messages(request).used = True
+            return redirect('blog-home')  # Redirect back to the home page
+    else:
+        form = FeedbackForm()
+
     context = {
-       'posts': Post.objects.all() #The view is looping over 'posts'
+        'form': form,
     }
     return render(request, 'blog/home.html', context)
 
@@ -186,7 +198,6 @@ def update_comment(request, comment_id):
             return JsonResponse({"success": False, "error": str(e)})
 
     return JsonResponse({"success": False, "error": "Invalid request method"})
-
 
 
 def daily_challenge(request, category):
