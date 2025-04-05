@@ -18,7 +18,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from .forms import PostForm, CommentForm, FeedbackForm
+from .forms import PostForm, CommentForm, FeedbackForm, PostReportForm
 from django.contrib.auth.decorators import login_required
 import json
 
@@ -37,13 +37,18 @@ User = get_user_model()
 
 def home(request):
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            messages.error(request, "You must be logged in to submit feedback.")
+            return redirect('login')
+        
         form = FeedbackForm(request.POST)
         if form.is_valid():
-            form.save()
+            feedback = form.save(commit=False)  # Don’t save to DB yet
+            if request.user.is_authenticated:
+                feedback.user = request.user
+            feedback.save()
             messages.success(request, "Thank you for your feedback!")
-            # Clear all previous messages (e.g., from profile updates)
-            messages.get_messages(request).used = True
-            return redirect('blog-home')  # Redirect back to the home page
+            return redirect('blog-home')
     else:
         form = FeedbackForm()
 
@@ -52,11 +57,15 @@ def home(request):
     }
     return render(request, 'blog/home.html', context)
 
+
 class PostListView(ListView):
     model = Post
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
+
+    posts = Post.objects.filter(is_active=True)
+
 
 
 class UserPostListView(ListView):
@@ -199,6 +208,24 @@ def update_comment(request, comment_id):
 
     return JsonResponse({"success": False, "error": "Invalid request method"})
 
+
+@login_required
+def report_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.method == 'POST':
+        form = PostReportForm(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.reporter = request.user
+            report.post = post
+            report.save()
+            messages.success(request, "Your report has been submitted. Thank you for keeping the community safe.")
+            return redirect('post-detail', pk=pk)
+    else:
+        form = PostReportForm()
+
+    return render(request, 'blog/report_post.html', {'form': form, 'post': post})
 
 def daily_challenge(request, category):
     """ Renders category page without pre-loading a prompt. """

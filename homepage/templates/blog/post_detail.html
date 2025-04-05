@@ -73,6 +73,11 @@
           {% endfor %}
         </div>
 
+        {% if user.is_authenticated %}
+          <a href="{% url 'report-post' post.pk %}" class="btn btn-warning btn-sm mt-2">Report Post</a>
+        {% endif %}
+
+
         </div>
       </article>
     </div>

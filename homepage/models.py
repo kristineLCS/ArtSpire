@@ -12,7 +12,10 @@ class Post(models.Model):
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
-    likes = models.ManyToManyField(User, related_name='community_posts')
+    likes = models.ManyToManyField(User, related_name='community_posts', blank=True)
+
+
+    is_active = models.BooleanField(default=True)  # Delete inappropiate posts recieved from report submissions
 
 
     def total_likes(self):
@@ -43,6 +46,33 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f"{self.subject} - {self.user.username if self.user else 'Anonymous'} on {self.created_at}"
+
+
+class PostReport(models.Model):
+    REPORT_CATEGORIES = [
+        ('spam', 'Spam or misleading'),
+        ('offensive', 'Offensive content'),
+        ('harassment', 'Harassment or bullying'),
+        ('violence', 'Violent or dangerous content'),
+        ('other', 'Other'),
+    ]
+
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('reviewed', 'Reviewed'),
+        ('action_taken', 'Action Taken'),
+        ('dismissed', 'Dismissed'),
+    ]
+
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='reports')
+    category = models.CharField(max_length=50, choices=REPORT_CATEGORIES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Report by {self.reporter} on Post {self.post.id} - {self.category}. "
 
 
 class ArtPrompt(models.Model):
