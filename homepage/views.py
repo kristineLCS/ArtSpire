@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.utils.text import slugify
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Post, Comment 
+from .models import Post, Comment, Tag 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from pathlib import Path
@@ -83,11 +84,20 @@ class PostDetailView(DetailView):
     template_name = 'blog/post_detail.html'
 
     def get_context_data(self, *args, **kwargs):
-        context = super(PostDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        
+        # Get the specific post instance
+        post = self.get_object()
 
-        stuff = get_object_or_404(Post, id=self.kwargs['pk'])
-        total_likes = stuff.total_likes()
-        context["total_likes"] = total_likes
+        # Get the tags associated with the post
+        tags_for_post = post.tags.all()  # 'tags' is the ManyToManyField from Post to Tag
+
+        # Add the tags to the context
+        context['tags_for_post'] = tags_for_post
+        
+        total_likes = post.total_likes()
+        context['total_likes'] = total_likes
+
         return context
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -226,6 +236,19 @@ def report_post(request, pk):
         form = PostReportForm()
 
     return render(request, 'blog/report_post.html', {'form': form, 'post': post})
+
+
+
+def tags(request, tag_slug):
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    posts = Post.objects.filter(tags=tag).order_by('-date_posted')
+    context = {
+        'posts': posts,
+        'tag': tag
+    }
+    return render(request, 'blog/tags_filter.html', context)
+
+
 
 def daily_challenge(request, category):
     """ Renders category page without pre-loading a prompt. """

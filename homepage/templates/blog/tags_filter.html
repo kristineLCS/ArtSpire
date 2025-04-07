@@ -1,0 +1,40 @@
+{% extends "blog/base.html" %}
+{% load hashtag_filters %}
+{% block content %}
+  <div class="tag-page">
+    <div class="tag-name">
+      <h2>#{{ tag.name }}</h2>
+    </div>
+
+    {% for post in posts %}
+      <div class="thumbnail-posts">
+        <article class="tag-post-container">
+          <div class="media-body">
+            <div class="article-metadata">
+              <img class="profile-pic"
+                  src="{{ post.author.profile.image_url|add:'?c_thumb,g_face,w_150,h_150,r_max' }}"
+                  alt="{{ user.username }}'s Profile Picture">
+
+              <a class="mr-2" href="{% url 'user-posts' post.author.username %}">
+                {{ post.author }}
+              </a>
+            </div>
+
+            <div class="image-grid">
+              {% if post.image %}
+                <a href="{% url 'post-detail' post.id %}" class="post-btn">
+                  <img class="tiny-post-img" src="{{ post.image.url|add:'?c_fill,g_auto,w_150,h_150' }}" alt="Post Image">
+                </a>
+              {% else %}
+                <p>No image available</p>
+              {% endif %}
+          </div>
+          </div>
+        </article>
+      </div>
+    {% empty %}
+     <p>No posts found with this tag.</p>
+    {% endfor %}
+  </div>
+
+{% endblock %}

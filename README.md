@@ -6,16 +6,16 @@ Problems to fix:
 - Update post button not working
 
 To Do:
-- Password reset
-- Hashtag filter (use tag)
+- Password reset (DONE)
 - Testings
 - Add Images to post_detail.html (DONE)
 - Allow users to like and comment on other user's posts (DONE)
 - Create user post history on their profile (SEMI_DONE?)
-- Create a feedback form
+- Create a feedback form (DONE)
 - Fix edit, delete, save changes button for comment delete and edit (DONE)
-- Create a report button
+- Create a report button (DONE)
 - Follow feature
+- Continue fixing hashtag function (KIND-OFF-DONE?)
 
 
 Links:

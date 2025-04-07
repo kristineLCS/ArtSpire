@@ -1,4 +1,5 @@
 {% extends "blog/base.html" %}
+{% load hashtag_filters %}
 {% block content %}
   <div class="post-detail-container">
     <div class="post-detail">
@@ -34,7 +35,14 @@
           </form>
 
           <div class="post-content">
-            <p class="article-content">{{ post.content }}</p>
+            <div class="tags">
+
+              <p>
+                {% autoescape off %}
+                {{ post.content|convert_hashtags }}
+                {% endautoescape %}
+              </p>
+          </div>
           </div>
 
 

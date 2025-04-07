@@ -30,8 +30,6 @@ def profile(request):
             u_form.save()
             p_form.save()
             
-            print("Uploaded image public_id:", request.user.profile.image.public_id)
-
             messages.success(request, f'Your account has been updated') #Changes here
             return redirect('profile')
     else:

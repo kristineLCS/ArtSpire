@@ -3,14 +3,37 @@ import os
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+import re
+from django.utils.text import slugify
+
 
 User = get_user_model()
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name='Tag')
+    slug = models.SlugField(unique=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Tag'
+        verbose_name_plural = 'Tags'
+        ordering = ['name']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)  # Fixed typo: self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to="post_images/", blank=True, null=True)
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
+    tags = models.ManyToManyField(Tag, related_name='posts', blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     likes = models.ManyToManyField(User, related_name='community_posts', blank=True)
 
@@ -18,13 +41,25 @@ class Post(models.Model):
     is_active = models.BooleanField(default=True)  # Delete inappropiate posts recieved from report submissions
 
 
+    def extract_and_save_tags(self):
+        self.tags.clear()  # Clear old tags to prevent duplicates/stale data
+        hashtags = set(re.findall(r'#(\w+)', self.content))
+        for tag_name in hashtags:
+            tag, created = Tag.objects.get_or_create(name=tag_name, defaults={'slug': slugify(tag_name)})
+            self.tags.add(tag)
+
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.extract_and_save_tags()
+
     def total_likes(self):
         return self.likes.count()
 
     def __str__(self):
         return self.title
     
-    def get_absolute_url(self): # Change here
+    def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
     
 

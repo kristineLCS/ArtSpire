@@ -28,6 +28,7 @@ urlpatterns = [
     path('comment/update/<int:comment_id>/', update_comment, name='comment-update'),
     path('user/<str:username>', UserPostListView.as_view(), name='user-posts'),
     path('post/<int:pk>/report/', views.report_post, name='report-post'),
+    path('tag/<slug:tag_slug>/', views.tags, name='tags'),
     path("challenge/<str:category>/", views.daily_challenge, name="daily_challenge"),
     path("get_prompt/", views.get_prompt, name="get_prompt"),
 ]
