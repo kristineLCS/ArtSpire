@@ -20,14 +20,39 @@
                 {% csrf_token %}
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4">Profile Info</legend>
-                    {{ u_form|crispy }} <!-- User update form -->
-                    {{ p_form.current_image }} <!-- Display the current image URL -->
-                    {{ p_form.image }} <!-- Display the image upload field -->
+                    {{ u_form|crispy }}
+
+                    <!-- Manually rendered current image field -->
+                    <div class="form-group">
+                        <label for="id_current_image">Current Profile Picture:</label>
+                        <div class="input-group">
+                            <input type="text" 
+                                name="current_image" 
+                                id="id_current_image"
+                                class="form-control"
+                                value="{{ p_form.current_image.value }}" 
+                                readonly
+                                onclick="window.open('{{ user.profile.image.url }}', '_blank')" 
+                            >
+                        </div>
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" name="clear_image" id="clear_image">
+                            <label class="form-check-label" for="clear_image">
+                                Clear current profile picture
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Image upload field only (no duplicate display) -->
+                    {{ p_form.image|as_crispy_field }}
+
                 </fieldset>
                 <div class="form-group">
                     <button class="btn btn-outline-info" type="submit">Update</button>
                 </div>
             </form>
+
+
         </div>
 
         <!-- Post History Section -->

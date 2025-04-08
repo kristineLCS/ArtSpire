@@ -46,7 +46,8 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['image']
 
         widgets = {
-            'image': forms.ClearableFileInput(attrs={'class': 'form-control custom-upload'})
+            # Swap ClearableFileInput for FileInput
+            'image': forms.FileInput(attrs={'class': 'form-control custom-upload'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -54,11 +55,10 @@ class ProfileUpdateForm(forms.ModelForm):
 
         if self.instance and self.instance.image:
             try:
-                # Extract just the public_id from Cloudinary field
                 public_id = self.instance.image.public_id
                 self.fields['current_image'].initial = public_id
             except Exception as e:
-                print("Could not extract public_id:", e)
+                self.fields['current_image'].initial = "Unable to retrieve public_id"
 
 
 

@@ -298,6 +298,19 @@ background-color: #52604f;
     font-size: 14px;
 }
 
+#id_current_image{
+    cursor: pointer; 
+    text-decoration: underline; 
+    color: #2c8bff;
+    background-color: #ffffff00;
+
+}
+
+
+.input-group-append{
+    margin-left: 10px;
+}
+
 
 
 /* TAG FILTER PAGE */
