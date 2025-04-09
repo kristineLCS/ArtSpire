@@ -44,7 +44,6 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'artspire-pyvm.onrender.com']
 INSTALLED_APPS = [
     'homepage.apps.HomepageConfig',
     'users.apps.UsersConfig',
-    'community.apps.CommunityConfig',
     'crispy_forms',
     'crispy_bootstrap5',
     'django.contrib.admin',
