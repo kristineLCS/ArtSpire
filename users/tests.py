@@ -55,7 +55,7 @@ class UserRegistrationTests(TestCase):
 class UserLoginTests(TestCase):
     def setUp(self):
         self.client = Client()
-        self.login_url = reverse('login')  # Update if your login URL name is different
+        self.login_url = reverse('login')
         self.user = User.objects.create_user(username='loginuser', email='login@example.com', password='testpass123')
 
     def test_login_with_valid_credentials(self):
@@ -72,7 +72,7 @@ class UserLoginTests(TestCase):
             'password': 'wrongpassword'
         })
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please enter a correct username and password")  # Message may vary
+        self.assertContains(response, "Please enter a correct username and password")
         self.assertFalse('_auth_user_id' in self.client.session)
 
 
@@ -98,7 +98,7 @@ class PasswordResetTests(TestCase):
         response = self.client.post(self.reset_url, {
             'email': 'nonexistent@example.com'
         })
-        self.assertEqual(response.status_code, 302)  # Should still redirect (no message exposed)
+        self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, self.reset_done_url)
 
     def test_password_reset_confirm_valid_token(self):
@@ -106,13 +106,10 @@ class PasswordResetTests(TestCase):
         response = self.client.post(self.reset_url, {
             'email': 'test@example.com'
         })
-        token = response.context['token']  # Get token from the response context
+        token = response.context['token']
 
         confirm_url = reverse('password_reset_confirm', kwargs={'uidb64': 'dummy', 'token': token})
         
-
-
-
 
 # PROFILE UPDATE
 class ProfileUpdateTest(TestCase):
@@ -153,9 +150,8 @@ def test_clear_profile_picture(self):
     })
 
     self.user.refresh_from_db()
-    self.assertTrue(self.user.profile.image.public_id)  # Confirm it's set
+    self.assertTrue(self.user.profile.image.public_id)
 
-    # Then clear it
     response = self.client.post(self.url, {
         'username': 'testuser',
         'email': 'test@example.com',

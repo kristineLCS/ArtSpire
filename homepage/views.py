@@ -232,10 +232,13 @@ def report_post(request, pk):
             report.save()
             messages.success(request, "Your report has been submitted. Thank you for keeping the community safe.")
             return redirect('post-detail', pk=pk)
+        else:
+            print(form.errors)  # Print form errors to debug
     else:
         form = PostReportForm()
 
     return render(request, 'blog/report_post.html', {'form': form, 'post': post})
+
 
 
 

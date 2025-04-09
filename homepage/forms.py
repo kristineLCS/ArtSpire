@@ -22,10 +22,9 @@ class FeedbackForm(forms.ModelForm):
 
 
 class PostReportForm(forms.ModelForm):
+    category = forms.ChoiceField(choices=PostReport.REPORT_CATEGORIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
+    description = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}))
+
     class Meta:
         model = PostReport
         fields = ['category', 'description']
-        widgets = {
-            'category': forms.Select(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-        }
