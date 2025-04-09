@@ -1,13 +1,22 @@
 {% extends "blog/base.html" %}
 
 {% block content %}
-    <!-- Display Category Title -->
-    <h1 id="category-name" data-category="{{ category }}">{{ category|title }}</h1>
+    <div class="category-title">
+     <!-- Display Category Title -->
+        <h1 id="category-name" class="category-title" data-category="{{ category }}">{{ category|title }}</h1>
+    </div>
 
-    <!-- Generate Button -->
-    <button type="submit" id="generate-btn">Generate Prompt</button>
+    <div class="category-template-container">
 
-    <!-- Prompt Display Section -->
-    <p id="prompt-text">Your generated prompt will appear here.</p>
+        <div class="category-template-box">
 
+            <!-- Prompt Display Section -->
+            <p id="prompt-text">Your generated prompt will appear here.</p>
+
+            <!-- Generate Button -->
+            <button type="submit" id="generate-btn" class="generate-prompt-btn">Generate</button>
+
+
+        </div>
+    </div>
 {% endblock %}

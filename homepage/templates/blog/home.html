@@ -5,16 +5,16 @@
 
     <div class="header-challenge">
         <div class="banner">
-            <h2 class="weekly-challlenge">Weekly Challenge</h2>
+            <div class="banner-header">
+                <h2 class="weekly-challlenge">Weekly</h2>
+                <h2 class="weekly-challlenge">Challenge :</h2>
+            </div>
+
             <h4 class="weekly-prompt">"Illustrate a hidden world inside a still life object"</h4>
         </div>
     </div>
 
-
-{% endblock content %}
-
-{% block aside %}
-    <h5>Have an artist block? Getting back into art? Starting a new hobby? Spark your creativity and imagination just by a click of a button!
+    <h5 class="paragraph">Have an artist block? Getting back into art? Starting a new hobby? Spark your creativity and imagination just by a click of a button!
         Pick and choose from the categories and generate as much prompts as you want. <br>
         Develop consistant creative skills by joining the weekly or daily (or both) challenge. Feel fre to use any medium you prefer. 
         Post on our community to share your artworks with other artists.
@@ -22,7 +22,7 @@
     <div class="category-container">
         <div class="random-prompts">
             <div class="aside-header">
-                <h4>CHOOSE FROM THE WEEKLY CHALLANGE OR THE DAILY CHALLANGE</h4>
+                <h4 class="choose-from">CHOOSE FROM THE WEEKLY CHALLANGE OR THE DAILY CHALLANGE</h4>
                 <h2>DAILY Challenge</h2>
             </div>
 
@@ -41,15 +41,23 @@
 
         </div>
 
+{% endblock content %}
+
+{% block aside %}
+
+
         <div class="feedback-container">
             <div class="feedback-form">
-                <h2>Feedback Form</h2>
+                <h2 class="form-title">Feedback Form</h2>
+
+                <h4 class="feedback-paragraph">Hey there! We’d love to hear from you! Your feedback helps us improve and create a better experience for everyone.
+                    Whether it's a suggestion, a bug you encountered, or just something you liked — feel free to share your thoughts below.</h4>
 
                 <!-- Feedback Form -->
-                <form method="POST">
+                <form method="POST" class="actual-form">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit">Submit</button>
+                    <button type="submit" class="feedback-submit-btn">Submit</button>
                 </form>
 
                 {% if messages %}
