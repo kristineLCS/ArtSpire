@@ -7,7 +7,7 @@ Problems to fix:
 
 To Do:
 - Password reset (DONE)
-- Finish testing on homepage app 
+- Finish testing on homepage app (Finish testing for feedback form!)
 - Add Images to post_detail.html (DONE)
 - Allow users to like and comment on other user's posts (DONE)
 - Create user post history on their profile (SEMI_DONE?)
@@ -18,6 +18,7 @@ To Do:
 - Continue fixing hashtag function (KIND-OFF-DONE? STYLING)
 - Make users username clickable to be able to show user's posts (DONE)
 - Fix styling on users post
+- Fix message alerts
 
 
 Links:

@@ -68,7 +68,6 @@ class PostListView(ListView):
     posts = Post.objects.filter(is_active=True)
 
 
-
 class UserPostListView(ListView):
     model = Post
     template_name = 'blog/user_posts.html'
@@ -113,7 +112,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'image']
     template_name = 'blog/post_form.html'
 
     def form_valid(self, form):
@@ -137,9 +136,10 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 @login_required
 def LikeView(request, pk):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post = get_object_or_404(Post, pk=pk)
     post.likes.add(request.user)
-    return HttpResponseRedirect(reverse('post-detail', args=[str(pk)]))
+    return redirect('post-detail', pk=post.pk)
+
 
 
 @login_required

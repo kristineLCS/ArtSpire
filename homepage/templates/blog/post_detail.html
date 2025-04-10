@@ -1,89 +1,99 @@
 {% extends "blog/base.html" %}
 {% load hashtag_filters %}
+{% load static %}
 {% block content %}
   <div class="post-detail-container">
     <div class="post-detail">
       <article class="media content-section">
         <div class="media-body">
-          <div class="article-metadata">
+          <div class="article-metadata" id="author-edit-container">
             <img class="profile-pic"
               src="{{ post.author.profile.image_url|add:'?c_thumb,g_face,w_150,h_150,r_max' }}"
               alt="{{ user.username }}'s Profile Picture">
-            <a class="mr-2" href="#">{{ object.author }}</a>
+            <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ object.author }}</a>
             <small class="text-muted">{{ object.date_posted|date:'dS, F, Y' }}</small>
             {% if object.author == user %}
-              <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
-                <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
+              <div class="update-delete">
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" id="update-btn" href="{% url 'post-update' object.id %}">Update</a>
+                <a class="btn btn-danger btn-sm mt-1 mb-1" id="delete-btn" href="{% url 'post-delete' object.id %}">Delete</a>
               </div>
             {% endif %}
           </div>
-          <h2 class="article-title">{{ object.title }}</h2>
+          <h2 class="article-title" id="post-title">{{ object.title }}</h2>
 
-          {% if object.image %}
-            <img class="post-img" src="{{ object.image.url }}?w=800&h=800&fit=crop" alt="Uploaded image">
-          {% else %}
-            <p>No image available</p>
-          {% endif %}
-
-          <form action="{% url 'post_like' post.pk %}" method="POST">
-            {% csrf_token %}
-            <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-sm">
-              Like
-            </button> - {{ total_likes }}
-            Likes
-          </form>
-
-          <div class="post-content">
-            <div class="tags">
-
-              <p>
-                {% autoescape off %}
-                {{ post.content|convert_hashtags }}
-                {% endautoescape %}
-              </p>
-          </div>
+          <div class="post-image-container">
+            {% if object.image %}
+              <img class="post-image" src="{{ object.image.url }}?w=800&h=800&fit=crop" alt="Uploaded image">
+            {% else %}
+              <p>No image available</p>
+            {% endif %}
           </div>
 
-
-          <!-- Comment Form -->
-          <!-- <div id="error-message"></div> -->
-
-        <!-- Comment Form -->
-        {% if user.is_authenticated %}
-            <h5>Add Comment</h5>
-            <form id="comment-form" data-post-id="{{ post.pk }}">
-                {% csrf_token %}
-                <textarea id="id_body" name="body" rows="3" class="form-control" required></textarea>
-                <button class="btn btn-secondary" type="submit">Add Comment</button>
+          <div class="post-texts-container">
+            <form action="{% url 'post_like' post.pk %}" method="POST">
+              {% csrf_token %}
+              <button class="like-btn-container {% if user in post.likes.all %}liked{% endif %}" type="submit" name="post_id" value="{{ post.id }}">
+                <img class="like-btn" src="{% static 'blog/images/like-icon.png' %}" alt="Like">
+              </button>
+              - {{ total_likes }} Likes
             </form>
-            <p id="error-message"></p>
-        {% else %}
-            <h5><a href="{% url 'login' %}">Login</a> to Comment</h5>
-        {% endif %}
 
-        <!-- Display Comments -->
-        <h2>Comments</h2>
-        <div id="comments-section">
-          {% for comment in post.comments.all %}
-            <div class="comment" id="comment-{{ comment.id }}">
-                <strong>{{ comment.name }} - {{ comment.date_added|date:"d M Y, H:i" }}</strong>
-                <p class="comment-body">{{ comment.body }}</p>
-                <!-- Edit and Delete buttons -->
-                {% if user.is_authenticated and comment.name == user.username %}
-                  <!-- Edit and Delete buttons only visible to the comment author -->
-                  <button type="submit" class="edit-comment btn btn-sm btn-primary" data-comment-id="{{ comment.id }}">Edit</button>
-                  <button  type="submit" class="delete-comment btn btn-sm btn-danger" data-comment-id="{{ comment.id }}">Delete</button>
-                {% endif %}
+            <div class="post-content">
+              <div class="tags">
+
+                <p>
+                  {% autoescape off %}
+                  {{ post.content|convert_hashtags }}
+                  {% endautoescape %}
+                </p>
+              </div>
             </div>
-          {% empty %}
-            <p>No comments yet.</p>
-          {% endfor %}
-        </div>
 
-        {% if user.is_authenticated %}
-          <a href="{% url 'report-post' post.pk %}" class="btn btn-warning btn-sm mt-2">Report Post</a>
-        {% endif %}
+
+            <!-- Comment Form -->
+            <!-- <div id="error-message"></div> -->
+
+            <div class="comment-container">
+              <!-- Comment Form -->
+              {% if user.is_authenticated %}
+                <h5>Add Comment</h5>
+                <form id="comment-form" data-post-id="{{ post.pk }}">
+                  {% csrf_token %}
+                  <textarea id="id_body" name="body" rows="3" class="form-control" required></textarea>
+                  <button class="btn btn-secondary" id="add-comment-btn" type="submit">Add Comment</button>
+                </form>
+                <p id="error-message"></p>
+              {% else %}
+                <h5><a href="{% url 'login' %}">Login</a> to Comment</h5>
+              {% endif %}
+
+              <!-- Display Comments -->
+              <div id="comments-section">
+                <h2>Comments</h2>
+                {% for comment in post.comments.all %}
+                  <div class="comment" id="comment-{{ comment.id }}">
+                    <strong>{{ comment.name }} - {{ comment.date_added|date:"d M Y, H:i" }}</strong>
+                    <p class="comment-body">{{ comment.body }}</p>
+                    <!-- Edit and Delete buttons -->
+                    {% if user.is_authenticated and comment.name == user.username %}
+                      <!-- Edit and Delete buttons only visible to the comment author -->
+                      <button type="submit" class="edit-comment btn btn-sm btn-primary" data-comment-id="{{ comment.id }}">Edit</button>
+                      <button  type="submit" class="delete-comment btn btn-sm btn-danger" data-comment-id="{{ comment.id }}">Delete</button>
+                    {% endif %}
+                  </div>
+                {% empty %}
+                  <p>No comments yet.</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+
+          <div class="report-post-container">
+            {% if user.is_authenticated %}
+              <a href="{% url 'report-post' post.pk %}" class="btn btn-warning btn-sm mt-2" id="report-post">Report Post</a>
+            {% endif %}
+          </div>
 
 
         </div>
