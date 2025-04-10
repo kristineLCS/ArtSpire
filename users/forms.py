@@ -46,7 +46,6 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['image']
 
         widgets = {
-            # Swap ClearableFileInput for FileInput
             'image': forms.FileInput(attrs={'class': 'form-control custom-upload'})
         }
 

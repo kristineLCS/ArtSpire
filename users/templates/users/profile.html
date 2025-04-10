@@ -19,7 +19,7 @@
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Profile Info</legend>
+                    <legend class="border-bottom mb-4" id="profile-info-text">Profile Info</legend>
                     {{ u_form|crispy }}
 
                     <!-- Manually rendered current image field -->
@@ -48,7 +48,7 @@
 
                 </fieldset>
                 <div class="form-group">
-                    <button class="btn btn-outline-info" type="submit">Update</button>
+                    <button class="btn btn-outline-info" type="submit" id="update-profile-btn">Update</button>
                 </div>
             </form>
 
@@ -56,21 +56,23 @@
         </div>
 
         <!-- Post History Section -->
-        <h3>Post History</h3>
-        {% if posts %}
-            <ul>
-                {% for post in posts %}
-                    <li>
-                        <a href="{% url 'post-detail' post.pk %}">
-                            <strong>{{ post.title }}</strong> - {{ post.date_posted|date:"d M Y" }}
-                        </a>
-                        <p>{{ post.body }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No posts yet.</p>
-        {% endif %}
+        <div class="post-history-container">
+            <h3>Post History</h3>
+            {% if posts %}
+                <ul>
+                    {% for post in posts %}
+                        <li>
+                            <a href="{% url 'post-detail' post.pk %}">
+                                <strong>{{ post.title }}</strong> - {{ post.date_posted|date:"d M Y" }}
+                            </a>
+                            <p>{{ post.body }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No posts yet.</p>
+            {% endif %}
+        </div>
     </div>
 
 {% endblock content %}

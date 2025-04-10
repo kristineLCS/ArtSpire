@@ -9,7 +9,8 @@
           <div class="article-metadata" id="author-edit-container">
             <img class="profile-pic"
               src="{{ post.author.profile.image_url|add:'?c_thumb,g_face,w_150,h_150,r_max' }}"
-              alt="{{ user.username }}'s Profile Picture">
+              alt="{{ user.username }}'s Profile Picture"
+            >
             <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ object.author }}</a>
             <small class="text-muted">{{ object.date_posted|date:'dS, F, Y' }}</small>
             {% if object.author == user %}

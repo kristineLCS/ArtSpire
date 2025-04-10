@@ -5,15 +5,15 @@
         <form method="POST">
             {% csrf_token %}  <!-- Manually adding the CSRF protection -->
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Login</legend>
+                <legend class="border-bottom mb-4" id="login-font">Login</legend>
 
                 {{ form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Login</button>
+                <button class="btn btn-outline-info" type="submit" id="login-btn">Login</button>
             </div>
         </form>
-        <div class="border-top pt-3">
+        <div class="border-top pt-3" id="forgot-pass-signup">
             <small class="text-muted">
                 <a class="ml-2" href="{% url 'password_reset' %}">Forgot Password</a>
             </small>

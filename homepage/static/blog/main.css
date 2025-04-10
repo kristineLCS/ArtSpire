@@ -180,7 +180,32 @@ background-color: #52604f;
 
 .artspire{
     font-family: 'Truculenta', 'times new roman', 'helvetica';
+}
 
+#login-font{
+    font-family: 'Truculenta', 'times new roman', 'helvetica';
+
+}
+
+#login-btn{
+    color: #ffffff;
+    text-decoration: none;
+    border: 1px solid, #7d513b; 
+    background-color: #7d513b;
+    border-radius: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+#forgot-pass-signup{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 350px;
 }
 
 /* HOME PAGE */
@@ -316,15 +341,21 @@ background-color: #52604f;
 }
 
 /* CATEGORY_TEMPLATE.HTML */
+.category-template-container{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
 .category-title{
     font-family: "Londrina Shadow",'Truculenta', 'times new roman';
     font-size: 50px;
-    margin-bottom: 150px;
+    /* margin-bottom: 150px; */
 }
 
 .category-title{
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 .generate-prompt-btn{
@@ -340,6 +371,23 @@ background-color: #52604f;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.generate-btn-container{
+    display: flex;
+    justify-content: center;
+}
+
+.prompt-text-container{
+    display: flex;
+    justify-content: center;
+}
+
+#prompt-text{
+    margin-top: 150px;
+    margin-bottom: 150px;
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 /* COMMUNITY SECTION */
@@ -536,6 +584,11 @@ img.post-img{
     align-items: center;
 }
 
+#profile-info-text{
+    font-family: 'Truculenta', 'times new roman', 'helvetica';
+
+}
+
 .custom-readonly {
     background-color: #f8f9fa;
     color: #333;
@@ -558,9 +611,26 @@ img.post-img{
 
 }
 
-
 .input-group-append{
     margin-left: 10px;
+}
+
+#update-profile-btn{
+    color: #ffffff;
+    text-decoration: none;
+    border: 1px solid, #7d513b; 
+    background-color: #7d513b;
+    border-radius: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.post-history-container{
+    margin-top: 40px;
 }
 
 
