@@ -3,32 +3,42 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<!-- This is the community page -->
+  <!-- This is the community page -->
 
-  {% for post in posts|dictsortreversed:"date_posted" %}
-    <article class="media content-section">
-      <div class="media-body">
-        <div class="article-metadata">
-          <img class="profile-pic"
+  <div class="post-list-wrapper">
+    {% for post in posts|dictsortreversed:"date_posted" %}
+      <article class="media content-section" id="content-section-container">
+        <div class="media-body">
+          <div class="article-metadata" id="username-info">
+            <img class="profile-pic"
               src="{{ post.author.profile.image_url|add:'?c_thumb,g_face,w_150,h_150,r_max' }}"
-              alt="{{ user.username }}'s Profile Picture">
+              alt="{{ user.username }}'s Profile Picture"
+            >
 
-          <a class="mr-2" href="{% url 'user-posts' post.author.username %}">
-            {{ post.author }}
-          </a>
-          <small class="text-muted">{{ post.date_posted|date:'dS, F, Y, h:i A' }}</small>
+            <a class="mr-2" href="{% url 'user-posts' post.author.username %}">
+              {{ post.author }}
+            </a>
+            <small class="text-muted">{{ post.date_posted|date:'dS, F, Y, h:i A' }}</small>
+          </div>
+
+          <div class="post-name">
+            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+
+          </div>
+
+          <div class="post-caption-preview">
+            {% if post.image %}
+              <img class="post-img" src="{{ post.image.url }}?w=500&h=500&fit=crop" alt="Post Image">
+            {% else %}
+              <p>No image available</p>
+            {% endif %}
+            <p class="article-content">{{ post.content|truncatechars:100 }}</p> <!--100 character limit for post preview-->
+            <a href="{% url 'post-detail' post.id %}" class="btn btn-primary" id="read-more-btn">Read More</a>
+          </div>
         </div>
-        <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
-        {% if post.image %}
-          <img class="post-img" src="{{ post.image.url }}?w=500&h=500&fit=crop" alt="Post Image">
-        {% else %}
-          <p>No image available</p>
-        {% endif %}
-        <p class="article-content">{{ post.content|truncatechars:100 }}</p> <!--100 character limit for post preview-->
-        <a href="{% url 'post-detail' post.id %}" class="btn btn-primary" id="read-more-btn">Read More</a>
-      </div>
-    </article>
-  {% endfor %}
+      </article>
+    {% endfor %}
+  </div>
 
 
   {% if is_paginated %}

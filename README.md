@@ -14,11 +14,12 @@ To Do:
 - Create a feedback form (DONE)
 - Fix edit, delete, save changes button for comment delete and edit (DONE)
 - Create a report button (DONE)
-- Follow feature
+- Follow feature (NOT ENOUGH TIME)
 - Continue fixing hashtag function (KIND-OFF-DONE? STYLING)
 - Make users username clickable to be able to show user's posts (DONE)
-- Fix styling on users post
+- Fix styling on users post (DONE)
 - Fix message alerts (DONE)
+- Fix user_post, post_list, register,  responsiveness to smaller screens (DONE)
 
 
 Links:

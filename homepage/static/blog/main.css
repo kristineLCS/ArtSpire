@@ -5,16 +5,18 @@ html, body {
     background: #fafafa;
     color: #333333;
     /* margin-top: 5rem; */
-    width: 100%;
+    max-width: 100%;
     min-height: 100vh;
     padding: 0;
     margin: 0;
     flex-direction: column; 
+    overflow-x: hidden;
 }
 
 body{
     width: 100%;
     margin-top: 30px;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -113,6 +115,7 @@ background-color: #52604f;
         color: red;
     }
 }
+
 
 @media (min-width: 768px) {
     .close-btn {
@@ -214,14 +217,17 @@ background-color: #52604f;
 }
 
 .main-container {
+    overflow-x: hidden;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     margin-top: 0px;
-    margin-left: 80px;
-    margin-right: 80px; 
+    margin-left: 5%;
+    margin-right: 5%;
+    max-width: 100%; /* Prevent overflow */
+    overflow-x: hidden;
 }
 
 .row{
@@ -234,6 +240,12 @@ background-color: #52604f;
 
 .artspire{
     font-family: 'Truculenta', 'times new roman', 'helvetica';
+}
+
+.login-page{
+    margin-left: 30px;
+    margin-right: 30px;
+
 }
 
 #login-font{
@@ -269,11 +281,15 @@ background-color: #52604f;
     margin-bottom: 30px;
 }
 
-.content-section{
+.content-box{
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-bottom: 40px;
+    margin-top: 80px;
+    margin-bottom: 50px;
+    margin-left: 30px;
+    margin-right: 30px;
+
 }
 
 #register-btn{
@@ -492,13 +508,50 @@ button{
 }
 
 /* COMMUNITY SECTION */
-.post-image{
-    max-width: 80%; 
-    height: auto;
-    margin-left: 40px;
-    margin-right: 40px;
-
+#content-section-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2rem auto;
+    max-width: 700px;
 }
+
+.post-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px;
+}
+
+.content-section {
+    width: 100%;
+    max-width: 700px;
+    padding: 20px;
+    margin-bottom: 2rem;
+}
+
+.media-body{
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.post-detail-container{
+    margin-top: 80px;
+    padding: 1rem;
+    max-width: 800px;
+    margin: auto;
+}
+
+
+.post-image {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    object-fit: contain;
+}
+
 
 #read-more-btn{
     color: #414b3e;
@@ -512,12 +565,12 @@ button{
     padding-top: 10px;
 }
 
-.content-section{
-    display: flex;
-    justify-content: center;
-    margin-top: 100px;
-    margin-bottom: 50px;
+#post-detail {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 0 1rem;
 }
+
 
 #author-edit-container{
     margin-left: 30px;
@@ -564,17 +617,19 @@ button{
     margin-bottom: 10px;
 }
 
+.post-img {
+    display: block;
+    margin: 1rem auto;
+    max-width: 100%;
+    height: auto;
+  }
+
 img.post-img{
     width: 500px;
     height: 300px;
     object-fit: cover;
     border-radius: 5px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.post-image-container{
-    display: flex;
-    justify-content: center;
 }
 
 
@@ -661,6 +716,13 @@ img.post-img{
 
 #community-post{
     font-family: 'Truculenta', 'times new roman', 'helvetica';
+
+}
+
+.form-content-section{
+    margin-top: 40px;
+    margin-left: 10%;
+    margin-right: 10%;
 
 }
 
@@ -822,6 +884,28 @@ img.post-img{
     transform: scale(1.02);
 }
 
-.footer{
+
+/* FOOTER */
+footer {
+    font-family: 'Truculenta', 'times new roman', 'helvetica';
+    font-size: small;
+    color: black;
+    background-color: rgb(255, 255, 255);
+    position: relative;
+    text-align: center;
+    width: 100%;
+    height:30px;
+    position: relative;
     margin-top: 40px;
+}
+
+.footerbox {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    margin: 0;
 }
