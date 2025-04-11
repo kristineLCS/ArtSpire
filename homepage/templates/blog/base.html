@@ -20,51 +20,67 @@
   {% endif %}
 </head>
 <body class="body-container">
-    <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-          <a class="navbar-brand mr-4" href="{% url 'blog-home' %}" class="artspire">ARTSPIRE</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" 
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarToggle">
-            <span class="close-btn" id="closeSidebar">&times;</span>
-            <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
-              <a class="nav-item nav-link" href="{% url 'post-list' %}">Community</a>
+  <header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+      <div class="container">
+        <a class="navbar-brand mr-4" href="{% url 'blog-home' %}" class="artspire">ARTSPIRE</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" 
+          aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggle">
+          <span class="close-btn" id="closeSidebar">&times;</span>
+          <div class="navbar-nav mr-auto">
+            <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
+            <a class="nav-item nav-link" href="{% url 'post-list' %}">Community</a>
 
-            </div>
-            <!-- Navbar Right Side -->
-            <div class="navbar-nav">
-              {% if user.is_authenticated %}
-                  <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
-                  <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
-                  <form action="{% url 'logout' %}" method="POST" class="form-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-link nav-item nav-link py-0" id="logout">Logout</button>
-                  </form>
-              {% else %}
-                  <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-                  <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
-              {% endif %}
-            </div>
+          </div>
+          <!-- Navbar Right Side -->
+          <div class="navbar-nav">
+            {% if user.is_authenticated %}
+              <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
+              <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+              <form action="{% url 'logout' %}" method="POST" class="form-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link nav-item nav-link py-0" id="logout">Logout</button>
+              </form>
+            {% else %}
+              <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+              <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+            {% endif %}
           </div>
         </div>
-      </nav>
-    </header>
+      </div>
+    </nav>
+  </header>
 
-    <main class="main-container">
-      {% block content %}{% endblock %}
-    </main>
+
+  <main class="main-container">
+    {% block content %}{% endblock %}
+  </main>
 
     <aside>
       {% block aside %}
       {% endblock %}
     </aside>
 
-    <footer>
-      <p>ArtSpire &copy; 2025</p>
+    <body>
+      <!-- All your navbar and content stuff -->
+    
+      {% if messages %}
+        <div class="message-popup-container">
+          {% for message in messages %}
+            <div class="popup-alert alert alert-{{ message.tags }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </body>
+    
+
+    <footer class="footer">
+      <p> &copy; ArtSpire 2025</p>
     </footer>
 
     <!-- Bootstrap JS (with Popper)-->

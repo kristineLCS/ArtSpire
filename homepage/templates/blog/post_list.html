@@ -25,7 +25,7 @@
           <p>No image available</p>
         {% endif %}
         <p class="article-content">{{ post.content|truncatechars:100 }}</p> <!--100 character limit for post preview-->
-        <a href="{% url 'post-detail' post.id %}" class="btn btn-primary">Read More</a>
+        <a href="{% url 'post-detail' post.id %}" class="btn btn-primary" id="read-more-btn">Read More</a>
       </div>
     </article>
   {% endfor %}

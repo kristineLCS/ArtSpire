@@ -18,7 +18,7 @@ To Do:
 - Continue fixing hashtag function (KIND-OFF-DONE? STYLING)
 - Make users username clickable to be able to show user's posts (DONE)
 - Fix styling on users post
-- Fix message alerts
+- Fix message alerts (DONE)
 
 
 Links:

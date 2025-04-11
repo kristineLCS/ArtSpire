@@ -23,6 +23,14 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 
+  // MESSAGE ALERT FADE OUT
+  setTimeout(() => {
+    const alerts = document.querySelectorAll('.popup-alert');
+    alerts.forEach(alert => {
+      alert.style.opacity = '0';
+    });
+  }, 8000); // 8 seconds
+
   // Ensure the "Generate" button fetches a prompt
   let generateBtn = document.getElementById("generate-btn");
   if (generateBtn) {

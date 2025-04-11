@@ -2,7 +2,6 @@
 
 {% block content %}
 {% load crispy_forms_tags %}
-
     <div class="header-challenge">
         <div class="banner">
             <div class="banner-header">
@@ -16,14 +15,14 @@
 
     <h5 class="paragraph">Have an artist block? Getting back into art? Starting a new hobby? Spark your creativity and imagination just by a click of a button!
         Pick and choose from the categories and generate as much prompts as you want. <br>
-        Develop consistant creative skills by joining the weekly or daily (or both) challenge. Feel fre to use any medium you prefer. 
+        Develop consistant creative skills by joining the weekly or daily (or both) challenge. Feel free to use any medium you prefer.
         Post on our community to share your artworks with other artists.
     </h5>
     <div class="category-container">
         <div class="random-prompts">
             <div class="aside-header">
                 <h4 class="choose-from">CHOOSE FROM THE WEEKLY CHALLANGE OR THE DAILY CHALLANGE</h4>
-                <h2>DAILY Challenge</h2>
+                <h2 class="daily-challenge">DAILY Challenge</h2>
             </div>
 
             <div class="categories">
@@ -60,17 +59,6 @@
                     <button type="submit" class="feedback-submit-btn">Submit</button>
                 </form>
 
-                {% if messages %}
-                    <div class="messages">
-                        {% for message in messages %}
-                            {% if message.tags == 'success' and message.message != "Your account has been updated" %}
-                                <div class="alert alert-success">
-                                    {{ message }}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
             </div>
         </div>
 
