@@ -44,7 +44,7 @@ def home(request):
         
         form = FeedbackForm(request.POST)
         if form.is_valid():
-            feedback = form.save(commit=False)  # Don’t save to DB yet
+            feedback = form.save(commit=False)
             if request.user.is_authenticated:
                 feedback.user = request.user
             feedback.save()
@@ -85,7 +85,6 @@ class PostDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Get the specific post instance
         post = self.get_object()
 
         # Get the tags associated with the post
@@ -101,7 +100,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content', 'image']  # Make sure 'image' is here
+    fields = ['title', 'content', 'image']
     template_name = 'blog/post_form.html'
 
     def form_valid(self, form):
@@ -146,7 +145,7 @@ def LikeView(request, pk):
 def post_comment(request, pk):
 
     if request.method == "POST":
-        print("➡️ Received a POST request")  # Debugging: Check if the view is hit
+        print("➡️ Received a POST request")  # Debugging
         print("📩 Request POST Data:", request.POST)
 
 
@@ -154,10 +153,10 @@ def post_comment(request, pk):
         form = CommentForm(request.POST)
         
         if form.is_valid():
-            comment = form.save(commit=False)  # Don't save yet
-            comment.post = post  # Associate with the post
-            comment.name = request.user.username  # Assign the logged-in user's name
-            comment.save()  # Now save the comment
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.name = request.user.username
+            comment.save()
 
             
             print("✅ Comment Saved Successfully:", comment.body)
@@ -179,7 +178,7 @@ def post_comment(request, pk):
 
 
 @login_required
-@csrf_exempt  # Or use a proper decorator
+@csrf_exempt
 def delete_comment(request, comment_id):
     if request.method == "POST":
         try:
@@ -199,7 +198,6 @@ def delete_comment(request, comment_id):
 
 @login_required
 @csrf_exempt 
-# same as def edit_comment
 def update_comment(request, comment_id):
     if request.method == "POST":
         try:
@@ -233,7 +231,7 @@ def report_post(request, pk):
             messages.success(request, "Your report has been submitted. Thank you for keeping the community safe.")
             return redirect('post-detail', pk=pk)
         else:
-            print(form.errors)  # Print form errors to debug
+            print(form.errors)
     else:
         form = PostReportForm()
 

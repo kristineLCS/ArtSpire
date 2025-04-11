@@ -6,20 +6,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   toggler.addEventListener("click", function() {
-      collapse.classList.toggle("show");
+    collapse.classList.toggle("show");
   });
 
   closeBtn.addEventListener("click", function () {
-      collapse.classList.remove("show");
-      collapse.style.width = '0';
-      collapse.style.display = 'none';
+    collapse.classList.remove("show");
+    collapse.style.width = '0';
+    collapse.style.display = 'none';
   });
 
   // Close sidebar when clicking outside of it
   document.addEventListener("click", function (event) {
-      if (!collapse.contains(event.target) && !toggler.contains(event.target)) {
-          collapse.classList.remove("show");
-      }
+    if (!collapse.contains(event.target) && !toggler.contains(event.target)) {
+      collapse.classList.remove("show");
+    }
   });
 
 
@@ -34,21 +34,21 @@ document.addEventListener("DOMContentLoaded", function () {
   // Ensure the "Generate" button fetches a prompt
   let generateBtn = document.getElementById("generate-btn");
   if (generateBtn) {
-      generateBtn.addEventListener("click", function () {
-          // Get category from data attribute on the page
-          let category = document.getElementById("category-name").dataset.category;
-          console.log("📌 Fetching prompt for category:", category);
+    generateBtn.addEventListener("click", function () {
+      // Get category from data attribute on the page
+      let category = document.getElementById("category-name").dataset.category;
+      console.log("📌 Fetching prompt for category:", category);
 
-          // Fetch the prompt based on the selected category
-          fetch(`/get_prompt/?category=${encodeURIComponent(category)}`)
-              .then(response => response.json())
-              .then(data => {
-                  console.log("✅ Received prompt:", data);
-                  // Update the page with the received prompt
-                  document.getElementById("prompt-text").innerText = data.prompt || "Error fetching prompt.";
-              })
-              .catch(error => console.error("❌ Error fetching prompt:", error));
-      });
+      // Fetch the prompt based on the selected category
+      fetch(`/get_prompt/?category=${encodeURIComponent(category)}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log("✅ Received prompt:", data);
+          // Update the page with the received prompt
+          document.getElementById("prompt-text").innerText = data.prompt || "Error fetching prompt.";
+        })
+        .catch(error => console.error("❌ Error fetching prompt:", error));
+    });
   }
 
 
@@ -82,40 +82,34 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
-          // Create the new comment HTML
-          const newComment = document.createElement("div");
-          newComment.classList.add("comment");
-          newComment.innerHTML = `
-              <strong>${data.name} - ${data.date_added}</strong>
-              <p class="comment-body">${data.body}</p>
-              <button class="edit-comment btn btn-sm btn-primary" data-comment-id="${data.comment_id}">Edit</button>
-              <button class="delete-comment btn btn-sm btn-danger" data-comment-id="${data.comment_id}">Delete</button>
-          `;
-  
-          // Append the new comment to the comment list
-          document.getElementById("comments-section").appendChild(newComment);
-  
-          // Clear the comment input field
-          document.getElementById("id_body").value = "";
-  
-          // Remove error message (if any)
-          errorMessageDiv.style.display = "none";
-  
-          // Reattach event listeners to the new Edit/Delete buttons
-          attachEditListeners(newComment.querySelector(".edit-comment"));
-          attachDeleteListeners(newComment.querySelector(".delete-comment"));
+        // Create the new comment HTML
+        const newComment = document.createElement("div");
+        newComment.classList.add("comment");
+        newComment.innerHTML = `
+          <strong>${data.name} - ${data.date_added}</strong>
+          <p class="comment-body">${data.body}</p>
+          <button class="edit-comment btn btn-sm btn-primary" data-comment-id="${data.comment_id}">Edit</button>
+          <button class="delete-comment btn btn-sm btn-danger" data-comment-id="${data.comment_id}">Delete</button>
+        `;
+
+        // Append the new comment to the comment list
+        document.getElementById("comments-section").appendChild(newComment);
+
+        // Clear the comment input field
+        document.getElementById("id_body").value = "";
+
+        // Remove error message (if any)
+        errorMessageDiv.style.display = "none";
+
+        // Reattach event listeners to the new Edit/Delete buttons
+        attachEditListeners(newComment.querySelector(".edit-comment"));
+        attachDeleteListeners(newComment.querySelector(".delete-comment"));
   
       } else {
-          errorMessageDiv.style.display = "block";
-          errorMessageDiv.textContent = data.error || "Could not submit comment. Try again.";
-      }
-  })
-  
-    // .catch(error => {
-    //   errorMessageDiv.style.display = "block";
-    //   errorMessageDiv.textContent = "Error submitting comment.";
-    //   console.log(error);
-    // });
+      errorMessageDiv.style.display = "block";
+      errorMessageDiv.textContent = data.error || "Could not submit comment. Try again.";
+    }
+    })
   });
       
 

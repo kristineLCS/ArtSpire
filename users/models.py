@@ -13,7 +13,6 @@ class Profile(models.Model):
     
     @property
     def image_url(self):
-        # If user has uploaded an image, use it; otherwise use the static default
         if self.image:
             return self.image.url
         return "https://res.cloudinary.com/djv5ebxzp/image/upload/v1743859123/default_wip6er.jpg"

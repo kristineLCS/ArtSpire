@@ -4,7 +4,6 @@
 html, body {
     background: #fafafa;
     color: #333333;
-    /* margin-top: 5rem; */
     max-width: 100%;
     min-height: 100vh;
     padding: 0;
@@ -343,7 +342,6 @@ button{
 }
 
 .header-challenge{
-    /* margintop: 180px; */
     margin-bottom: 100px;
     background-color: #d6e8d2;
     padding-top: 20px;
@@ -467,7 +465,6 @@ button{
 .category-title{
     font-family: "Londrina Shadow",'Truculenta', 'times new roman';
     font-size: 50px;
-    /* margin-bottom: 150px; */
 }
 
 .category-title{
@@ -753,9 +750,6 @@ img.post-img{
 .user-posts-container{
     margin-top: 80px;
 }
-
-
-
 
 
 /* PROFILE PAGE */

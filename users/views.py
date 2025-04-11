@@ -9,14 +9,14 @@ from django.core import mail
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegisterForm(request.POST) #UserRegisterForm instead of UserCreationForm
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'The account {username} was created successfully, now you can login.')
             return redirect('login')
     else:
-        form = UserRegisterForm() #UserRegisterForm instead of UserCreationForm
+        form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
 @login_required
