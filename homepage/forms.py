@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post, Comment, Feedback, PostReport
+from .models import Post, Comment, Feedback, PostReport, WeeklyChallenge
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -28,3 +28,9 @@ class PostReportForm(forms.ModelForm):
     class Meta:
         model = PostReport
         fields = ['category', 'description']
+
+
+class WeeklyChallengeForm(forms.ModelForm):
+    class Meta:
+        model = WeeklyChallenge
+        fields = ['challenge_text']

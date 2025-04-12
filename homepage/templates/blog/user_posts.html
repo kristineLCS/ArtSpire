@@ -23,15 +23,18 @@
             <small class="text-muted">{{ post.date_posted|date:'dS, F, Y, h:i A' }}</small>
           </div>
 
-          <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
-          {% if post.image %}
-            <img class="post-img" src="{{ post.image.url }}?w=500&h=500&fit=crop" alt="Post Image">
-          {% else %}
-            <p>No image available</p>
-          {% endif %}
 
-          <p class="article-content">{{ post.content|truncatechars:100 }}</p>
-          <a href="{% url 'post-detail' post.id %}" class="btn btn-primary" id="read-more-btn">Read More</a>
+          <div class="post-caption-preview">
+            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+            {% if post.image %}
+              <img class="post-img" src="{{ post.image.url }}?w=500&h=500&fit=crop" alt="Post Image">
+            {% else %}
+              <p>No image available</p>
+            {% endif %}
+
+            <p class="article-content">{{ post.content|truncatechars:100 }}</p>
+            <a href="{% url 'post-detail' post.id %}" class="btn btn-primary" id="read-more-btn">Read More</a>
+          </div>
         </div>
       </article>
     {% endfor %}

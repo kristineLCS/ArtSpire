@@ -81,8 +81,18 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .then(response => response.json())
     .then(data => {
+      // Inside the .then() block after adding a new comment:
       if (data.success) {
-        // Create the new comment HTML
+        // Append the new comment to the comment list
+        const commentList = document.querySelector(".comment-list");
+        const noCommentMsg = document.querySelector(".no-comment-msg");
+
+        // Remove "No comments yet." message if it exists
+        if (noCommentMsg && noCommentMsg.parentNode) {
+          noCommentMsg.parentNode.removeChild(noCommentMsg);
+        }
+
+        // Create the new comment element
         const newComment = document.createElement("div");
         newComment.classList.add("comment");
         newComment.innerHTML = `
@@ -91,200 +101,223 @@ document.addEventListener("DOMContentLoaded", function () {
           <button class="edit-comment btn btn-sm btn-primary" data-comment-id="${data.comment_id}">Edit</button>
           <button class="delete-comment btn btn-sm btn-danger" data-comment-id="${data.comment_id}">Delete</button>
         `;
-
-        // Append the new comment to the comment list
-        document.getElementById("comments-section").appendChild(newComment);
-
-        // Clear the comment input field
+        
+        // Add the comment to the comment list
+        commentList.appendChild(newComment);
+        
+        // Clear input
         document.getElementById("id_body").value = "";
-
-        // Remove error message (if any)
-        errorMessageDiv.style.display = "none";
-
+        
         // Reattach event listeners to the new Edit/Delete buttons
         attachEditListeners(newComment.querySelector(".edit-comment"));
         attachDeleteListeners(newComment.querySelector(".delete-comment"));
-  
+        
+        // Remove error message (if any)
+        errorMessageDiv.style.display = "none";
+
+        // Update the "No comments yet" message
+        updateNoCommentsMessage(); // <-- Call this function to update message visibility
+      
       } else {
-      errorMessageDiv.style.display = "block";
-      errorMessageDiv.textContent = data.error || "Could not submit comment. Try again.";
-    }
+        errorMessageDiv.style.display = "block";
+        errorMessageDiv.textContent = data.error || "Could not submit comment. Try again.";
+      }
     })
   });
       
 
   // Update Comment
-  document.querySelectorAll(".edit-comment").forEach(button => {
-    button.addEventListener("click", function (e) {
-      const commentId = e.target.getAttribute("data-comment-id");
-      const commentDiv = e.target.parentNode;
-      const commentBodyElement = commentDiv.querySelector(".comment-body");
-      const editButton = commentDiv.querySelector(".edit-comment");
-      const deleteButton = commentDiv.querySelector(".delete-comment");
+  document.querySelector(".comment-list").addEventListener("click", function(event) {
+    const target = event.target;
 
-      // Hide edit and delete buttons
-      editButton.style.display = "none";
-      deleteButton.style.display = "none";
+    // Check if the clicked target is an edit button
+    if (target && target.classList.contains("edit-comment")) {
+      handleEdit(target); // Call function to handle edit
+    } 
+    // Check if clicked target is a delete button
+    else if (target && target.classList.contains("delete-comment")) {
+      handleDelete(target); // Call function to handle delete
+    }
+  });
 
-      // Prevent multiple edit fields
-      if (commentDiv.querySelector("textarea")) {
-        return;
-      }
+  // Handle Edit Action
+  function handleEdit(target) {
+    const commentId = target.getAttribute("data-comment-id");
+    const commentDiv = target.closest(".comment");
+    const commentBodyElement = commentDiv.querySelector(".comment-body");
+    const editButton = commentDiv.querySelector(".edit-comment");
+    const deleteButton = commentDiv.querySelector(".delete-comment");
+
+    // Hide edit and delete buttons
+    editButton.style.display = "none";
+    deleteButton.style.display = "none";
+
+    // Prevent multiple edit fields
+    if (commentDiv.querySelector("textarea")) {
+      return;
+    }
 
     const commentText = commentBodyElement.textContent;
 
-      // Create a textarea for editing
-      const textArea = document.createElement("textarea");
-      textArea.value = commentText;
-      textArea.rows = 3;
-      textArea.classList.add("form-control");
+    // Create a text area for editing
+    const textArea = document.createElement("textarea");
+    textArea.value = commentText;
+    textArea.rows = 3;
+    textArea.classList.add("form-control");
 
-      // Replace comment text with textarea
-      commentBodyElement.replaceWith(textArea);
+    // Replace comment text with text area
+    commentBodyElement.replaceWith(textArea);
 
-      // Create Save and Cancel buttons
-      const saveButton = document.createElement("button");
-      saveButton.textContent = "Save";
-      saveButton.classList.add("save-edit", "btn", "btn-sm", "btn-success", "mx-1");
+    // Create Save and Cancel buttons
+    const saveButton = document.createElement("button");
+    saveButton.textContent = "Save";
+    saveButton.classList.add("save-edit", "btn", "btn-sm", "btn-success", "mx-1");
 
-      const cancelButton = document.createElement("button");
-      cancelButton.textContent = "Cancel";
-      cancelButton.classList.add("cancel-edit", "btn", "btn-sm", "btn-secondary");
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = "Cancel";
+    cancelButton.classList.add("cancel-edit", "btn", "btn-sm", "btn-secondary");
 
-      // Append buttons only once
-      commentDiv.appendChild(saveButton);
-      commentDiv.appendChild(cancelButton);
+    // Append buttons only once
+    commentDiv.appendChild(saveButton);
+    commentDiv.appendChild(cancelButton);
 
-      // Save button functionality
-      saveButton.addEventListener("click", function () {
-        const newBody = textArea.value.trim();
-        if (newBody) {
-          fetch(`/comment/${commentId}/edit/`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
-            },
-            body: JSON.stringify({ body: newBody }),
+    // Save button functionality
+    saveButton.addEventListener("click", function () {
+      const newBody = textArea.value.trim();
+      if (newBody) {
+        fetch(`/comment/${commentId}/edit/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+          },
+          body: JSON.stringify({ body: newBody }),
         })
         .then(response => response.json())
         .then(data => {
           if (data.success) {
-            // Replace textarea with updated comment text
+            // Replace text area with updated comment text
             const updatedCommentBody = document.createElement("p");
             updatedCommentBody.classList.add("comment-body");
             updatedCommentBody.textContent = newBody;
             textArea.replaceWith(updatedCommentBody);
             saveButton.remove();
             cancelButton.remove();
-                
-            // Show edit and delete buttons again
-            editButton.style.display = "inline-block";
-            deleteButton.style.display = "inline-block";
+
+            // Create and append new Edit and Delete buttons
+            const newEditButton = document.createElement("button");
+            newEditButton.textContent = "Edit";
+            newEditButton.classList.add("edit-comment", "btn", "btn-sm", "btn-primary");
+            newEditButton.setAttribute("data-comment-id", commentId);
+
+            const newDeleteButton = document.createElement("button");
+            newDeleteButton.textContent = "Delete";
+            newDeleteButton.classList.add("delete-comment", "btn", "btn-sm", "btn-danger");
+            newDeleteButton.setAttribute("data-comment-id", commentId);
+
+            // Insert the new buttons after the updated comment text
+            updatedCommentBody.appendChild(newEditButton);
+            updatedCommentBody.appendChild(newDeleteButton);
+
+            // Reattach event listeners to the new Edit/Delete buttons
+            attachEditListeners(newEditButton);
+            attachDeleteListeners(newDeleteButton);
           } else {
             console.error("Error updating comment:", data.error);
           }
-          });
-        }
-      });
-
-      // Cancel button functionality
-      cancelButton.addEventListener("click", function () {
-        const originalCommentBody = document.createElement("p");
-        originalCommentBody.classList.add("comment-body");
-        originalCommentBody.textContent = commentText;
-        textArea.replaceWith(originalCommentBody);
-        saveButton.remove();
-        cancelButton.remove();
-
-        // Show edit and delete buttons again
-        editButton.style.display = "inline-block";
-        deleteButton.style.display = "inline-block";
-      });
+        });
+      }
     });
-  });
 
+    // Cancel button functionality
+    cancelButton.addEventListener("click", function () {
+      const originalCommentBody = document.createElement("p");
+      originalCommentBody.classList.add("comment-body");
+      originalCommentBody.textContent = commentText;
+      textArea.replaceWith(originalCommentBody);
+      saveButton.remove();
+      cancelButton.remove();
 
-
-  // Function to display error messages
-  function showError(message) {
-    const errorDiv = document.getElementById("error-message");
-    errorDiv.style.display = "block";
-    errorDiv.textContent = message;
+      // Show edit and delete buttons again
+      editButton.style.display = "inline-block";
+      deleteButton.style.display = "inline-block";
+    });
   }
 
+  // Handle Delete Action
+  function handleDelete(target) {
+    const commentId = target.getAttribute("data-comment-id");
+    const commentDiv = target.closest(".comment");
 
+    const confirmDiv = document.createElement("div");
+    confirmDiv.classList.add("confirmation-message");
 
-  // Delete Comment
-  document.querySelectorAll(".delete-comment").forEach(button => {
-    button.addEventListener("click", function(e) {
-      const commentId = e.target.getAttribute("data-comment-id");
+    const confirmText = document.createElement("p");
+    confirmText.textContent = "Are you sure you want to delete this comment?";
 
-      if (!commentId) {
-        console.error("❌ No comment ID found. Check your HTML!");
-        return;
-      }
+    const confirmButton = document.createElement("button");
+    confirmButton.textContent = "Confirm";
+    confirmButton.classList.add("btn", "btn-sm", "btn-danger");
 
-      const commentDiv = e.target.parentNode;
-      console.log("🛠️ Debug: commentDiv =", commentDiv);
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = "Cancel";
+    cancelButton.classList.add("btn", "btn-sm", "btn-secondary");
 
-      // Show a confirmation message instead of the Delete button
-      const confirmDiv = document.createElement("div");
-      confirmDiv.classList.add("confirmation-message");
+    confirmDiv.appendChild(confirmText);
+    confirmDiv.appendChild(confirmButton);
+    confirmDiv.appendChild(cancelButton);
 
-      const confirmText = document.createElement("p");
-      confirmText.textContent = "Are you sure you want to delete this comment?";
+    commentDiv.appendChild(confirmDiv);
+    target.remove(); // remove original delete button
 
-      const confirmButton = document.createElement("button");
-      confirmButton.textContent = "Confirm";
-      confirmButton.classList.add("btn", "btn-sm", "btn-danger");
+    cancelButton.addEventListener("click", function() {
+      confirmDiv.remove();
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.classList.add("delete-comment", "btn", "btn-sm", "btn-danger");
+      deleteButton.setAttribute("data-comment-id", commentId);
+      commentDiv.appendChild(deleteButton);
+    });
 
-      const cancelButton = document.createElement("button");
-      cancelButton.textContent = "Cancel";
-      cancelButton.classList.add("btn", "btn-sm", "btn-secondary");
+    confirmButton.addEventListener("click", function() {
+      const deleteUrl = `/comment/${commentId}/delete/`;  // Constructed URL
 
-      confirmDiv.appendChild(confirmText);
-      confirmDiv.appendChild(confirmButton);
-      confirmDiv.appendChild(cancelButton);
-
-      commentDiv.appendChild(confirmDiv);
-      e.target.remove(); // Remove the original delete button
-
-      cancelButton.addEventListener("click", function() {
-        confirmDiv.remove();
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete";
-        deleteButton.classList.add("delete-comment", "btn", "btn-sm", "btn-danger");
-        deleteButton.setAttribute("data-comment-id", commentId);
-        commentDiv.appendChild(deleteButton);
-      });
-
-      confirmButton.addEventListener("click", function() {
-        const deleteUrl = `/comment/${commentId}/delete/`;  // Constructed URL
-        console.log("🛠️ Debug: Sending DELETE request to", deleteUrl);
-    
-        fetch(deleteUrl, {  
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
-          },
-          })
-          .then(response => response.json())
-          .then(data => {
-            console.log("🛠️ Debug: Response from server:", data);  // Check server response
-            if (data.success) {
-              commentDiv.remove();
-            } else {
-              console.error("❌ Error deleting comment:", data.error);
-            }
-          })
-          .catch(error => {
-            console.error("❌ Fetch error:", error);
-          });
+      fetch(deleteUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          commentDiv.remove();
+        } else {
+          console.error("❌ Error deleting comment:", data.error);
+        }
       });
     });
-  });
+  }
+
+  function updateNoCommentsMessage() {
+    const commentList = document.querySelector(".comment-list");
+    const existingMsg = document.querySelector(".no-comment-msg");
+  
+    if (commentList.children.length === 0) {
+      if (!existingMsg) {
+        const msg = document.createElement("div");
+        msg.classList.add("no-comment-msg");
+        msg.innerHTML = "<p>No comments yet.</p>";
+        commentList.parentNode.appendChild(msg);
+      }
+    } else {
+      if (existingMsg) {
+        existingMsg.remove();
+      }
+    }
+  }
+  
 
   
 });

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.utils.text import slugify
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Post, Comment, Tag 
+from .models import Post, Comment, Tag, WeeklyChallenge  
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from pathlib import Path
@@ -37,6 +37,8 @@ User = get_user_model()
 
 
 def home(request):
+    challenge = WeeklyChallenge.objects.first()
+
     if request.method == 'POST':
         if not request.user.is_authenticated:
             messages.error(request, "You must be logged in to submit feedback.")
@@ -55,7 +57,9 @@ def home(request):
 
     context = {
         'form': form,
+        'challenge': challenge,
     }
+
     return render(request, 'blog/home.html', context)
 
 

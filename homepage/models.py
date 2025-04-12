@@ -61,6 +61,14 @@ class Post(models.Model):
     
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
+
+
+class WeeklyChallenge(models.Model):
+    challenge_text = models.CharField(max_length=255, help_text="Enter the weekly challenge text.")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.challenge_text
     
 
 class Comment(models.Model):
