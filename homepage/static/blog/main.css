@@ -347,7 +347,8 @@ button{
     padding-top: 20px;
     padding-bottom: 60px;
     width: 100%;
-    height: 500px
+    height: 500px;
+    text-align: center;
 }
 .banner {
     display: flex;
@@ -363,7 +364,22 @@ button{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    gap: 0.3em;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+    .weekly-challlenge {
+        font-size: 3rem;
+    }
+
+    .weekly-prompt {
+        font-size: 2rem;
+    }
+
+    .banner-header {
+        flex-direction: column;
+    }
 }
 
 .heading{
